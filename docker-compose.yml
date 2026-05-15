@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mcp-server:
+    build: .
+    container_name: mcp_mqtt_opcua
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./license:/app/license:ro
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
