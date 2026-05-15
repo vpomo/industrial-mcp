@@ -1501,6 +1501,6 @@ curl -X POST http://localhost:8080 \
 - [x] 16. pkg/logger: zap, metrics
 - [x] 17. cmd/server/main.go
 - [x] 18. Makefile
-- [ ] 19. Тесты
-- [ ] 20. Линтер
-- [ ] 21. Docker сборка и запуск
+- [x] 19. Тесты
+- [x] 20. Линтер
+- [x] 21. Docker сборка и запуск

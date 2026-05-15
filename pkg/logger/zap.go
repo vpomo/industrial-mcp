@@ -49,18 +49,18 @@ func (l *Logger) WithComponent(component string) *Logger {
 	}
 }
 
-func (l *Logger) Info(msg string, args ...any) {
-	l.Logger.Info().Msgf(msg, args...)
+func (l *Logger) Info(msg string, keyvals ...any) {
+	l.Logger.Info().Fields(keyvals).Msg(msg)
 }
 
-func (l *Logger) Error(msg string, args ...any) {
-	l.Logger.Error().Msgf(msg, args...)
+func (l *Logger) Error(msg string, keyvals ...any) {
+	l.Logger.Error().Fields(keyvals).Msg(msg)
 }
 
-func (l *Logger) Debug(msg string, args ...any) {
-	l.Logger.Debug().Msgf(msg, args...)
+func (l *Logger) Debug(msg string, keyvals ...any) {
+	l.Logger.Debug().Fields(keyvals).Msg(msg)
 }
 
-func (l *Logger) Warn(msg string, args ...any) {
-	l.Logger.Warn().Msgf(msg, args...)
+func (l *Logger) Warn(msg string, keyvals ...any) {
+	l.Logger.Warn().Fields(keyvals).Msg(msg)
 }

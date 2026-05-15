@@ -7,8 +7,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gopcua/opcua v0.8.0
 	github.com/rs/zerolog v1.35.1
-	go.uber.org/multierr v1.11.0
-	golang.org/x/crypto v0.51.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
