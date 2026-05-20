@@ -3,7 +3,7 @@ package driver
 import (
 	"context"
 
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+	"github.com/vpomo/industrial-mcp/internal/domain/entity"
 )
 
 type BACnetDriver struct {

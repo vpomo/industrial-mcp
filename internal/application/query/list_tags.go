@@ -3,7 +3,7 @@ package query
 import (
 	"context"
 
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
+	"github.com/vpomo/industrial-mcp/internal/domain/service"
 )
 
 type ListTagsQuery struct {

@@ -9,15 +9,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/vpomo/mcp_mqtt_opcua/internal/application/command"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/application/query"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/mqtt"
-	infrarepo "github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/interfaces/mcp"
-	"github.com/vpomo/mcp_mqtt_opcua/pkg/license"
-	"github.com/vpomo/mcp_mqtt_opcua/pkg/logger"
-	"github.com/vpomo/
+	"github.com/vpomo/industrial-mcp/internal/application/command"
+	"github.com/vpomo/industrial-mcp/internal/application/query"
+	"github.com/vpomo/industrial-mcp/internal/domain/service"
+	"github.com/vpomo/industrial-mcp/internal/infrastructure/mqtt"
+	infrarepo "github.com/vpomo/industrial-mcp/internal/infrastructure/repository"
+	"github.com/vpomo/industrial-mcp/internal/interfaces/mcp"
+	"github.com/vpomo/industrial-mcp/pkg/license"
+	"github.com/vpomo/industrial-mcp/pkg/logger"
 	"gopkg.in/yaml.v3"
 )
 

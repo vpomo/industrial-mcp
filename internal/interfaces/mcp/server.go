@@ -9,12 +9,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/application/command"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/application/query"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
-	"github.com/vpomo/mcp_mqtt_opcua/pkg/license"
-	"github.com/vpomo/mcp_mqtt_opcua/pkg/logger"
-	"github.com/vpomo/mcp_mqtt_opcua/pkg/x402"
+	"github.com/vpomo/industrial-mcp/internal/application/command"
+	"github.com/vpomo/industrial-mcp/internal/application/query"
+	"github.com/vpomo/industrial-mcp/internal/infrastructure/repository"
+	"github.com/vpomo/industrial-mcp/pkg/license"
+	"github.com/vpomo/industrial-mcp/pkg/logger"
+	"github.com/vpomo/industrial-mcp/pkg/x402"
 )
 
 type MCPServer struct {

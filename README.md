@@ -58,3 +58,9 @@ JSON-RPC методы:
    Нагрузочные тесты
 # Тесты
 go test -v -cover ./...
+
+#### Создание `license-tool` под Ubuntu и Windows
+```bash
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o license-tool ./cmd/license-tool
+CGO_ENABLED=0 CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH=amd64 -o license-tool ./cmd/license-tool
+```

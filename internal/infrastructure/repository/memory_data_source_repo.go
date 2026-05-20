@@ -5,7 +5,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+	"github.com/vpomo/industrial-mcp/internal/domain/entity"
 )
 
 var ErrDataSourceNotFound = errors.New("data source not found")

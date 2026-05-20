@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/repository"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/mqtt"
+	"github.com/vpomo/industrial-mcp/internal/domain/entity"
+	"github.com/vpomo/industrial-mcp/internal/domain/repository"
+	"github.com/vpomo/industrial-mcp/internal/infrastructure/mqtt"
 )
 
 type WriteTagCommand struct {

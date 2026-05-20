@@ -26,8 +26,8 @@
 ### Шаг 1: Создать директорию для ключей
 
 ```bash
-mkdir -p /opt/awwantil-license/keys
-cd /opt/awwantil-license/keys
+mkdir -p /opt/mcp-license/keys
+cd /opt/mcp-license/keys
 ```
 
 ### Шаг 2: Генерировать закрытый ключ
@@ -68,13 +68,17 @@ openssl rsa -in private.pem -check
 Клиент запускает команду:
 
 ```bash
-cd /opt/awwantil-license
-./awwantil-license export-hwid
+cd /opt/mcp-license
+./license-tool export-hwid
 ```
 
 Результат:
 ```
-Hardware ID: A1B2C3D4E5F67890...
+Hardware ID: e117aa4fbb33ea4fcbcd6fe5bd1c31315687e06272467d294d23e35331875587
+  CPUID: 2170e3a77c784e029c4d45c226e1fe28
+  MAC: 00:15:5d:63:50:17
+  VolumeID:
+  Motherboard: 2170e3a77c784e029c4d45c226e1fe28
 ```
 
 Клиент передаёт этот HWID издателю.
@@ -82,26 +86,32 @@ Hardware ID: A1B2C3D4E5F67890...
 ### Шаг 2: Создать файл лицензии
 
 ```bash
-cd /opt/awwantil-license
-./license-generator create \
-    --hardware-hash A1B2C3D4E5F67890 \
-    --expires 2025-12-31 \
+cd /opt/mcp-license
+./license-tool create \
+    --hardware-hash e117aa4fbb33ea4fcbcd6fe5bd1c31315687e06272467d294d23e35331875587 \
+    --expires 2026-12-31 \
     --features basic,pro,enterprise \
-    --output /tmp/license.dat
+    --output ./tmp/license.dat
 ```
 
 ### Шаг 3: Проверить созданную лицензию
 
 ```bash
-./license-generator verify --file /tmp/license.dat
+./license-tool verify --file ./tmp/license.dat
 ```
 
 Ожидаемый вывод:
 ```
-License valid
-Expires: 2025-12-31 23:59:59
-Features: basic, pro, enterprise
-Signature: OK
+License file: ./tmp/license.dat
+  Version: 1
+  Hardware Hash: e117aa4fbb33ea4fcbcd6fe5bd1c31315687e06272467d294d23e35331875587
+  Issued: 2026-05-20 19:24:03
+  Expires: 2026-12-31 00:00:00
+  Features: [basic pro enterprise]
+  Issuer: awwantil Licensing
+  Status: VALID
+  Days remaining: 224
+  Signature: VALID
 ```
 
 ### Шаг 4: Передать файл клиенту
@@ -172,13 +182,13 @@ curl http://localhost:8080/api/v1/license/status
 ### Через CLI
 
 ```bash
-./awwantil-license verify
+./license-tool verify
 ```
 
 ### Получить HWID машины
 
 ```bash
-./awwantil-license export-hwid
+./license-tool export-hwid
 ```
 
 ---

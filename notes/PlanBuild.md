@@ -60,7 +60,7 @@
 ## 2. Структура проекта
 
 ```
-/home/user/vpomo/mcp_mqtt_opcua/
+/home/user/vpomo/industrial-mcp/
 ├── cmd/
 │   └── server/
 │       └── main.go                 # Точка входа
@@ -128,13 +128,13 @@
 
 #### 3.1.1 Инициализация Go модуля
 ```bash
-go mod init github.com/vpomo/mcp_mqtt_opcua
+go mod init github.com/vpomo/industrial-mcp
 ```
 
 #### 3.1.2 Создание go.mod с зависимостями
 ```go
 // go.mod
-module github.com/vpomo/mcp_mqtt_opcua
+module github.com/vpomo/industrial-mcp
 
 go 1.26
 
@@ -179,7 +179,7 @@ version: '3.8'
 services:
   mcp-server:
     build: .
-    container_name: mcp_mqtt_opcua
+    container_name: industrial-mcp
     ports:
       - "8080:8080"
     env_file:
@@ -314,7 +314,7 @@ func (l *License) HasFeature(feature string) bool {
 ```go
 package repository
 
-import "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+import "github.com/vpomo/industrial-mcp/internal/domain/entity"
 
 type TagReader interface {
     GetByID(ctx context.Context, id string) (*entity.Tag, error)
@@ -362,8 +362,8 @@ package service
 import (
     "context"
     "errors"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/repository"
+    "github.com/vpomo/industrial-mcp/internal/domain/entity"
+    "github.com/vpomo/industrial-mcp/internal/domain/repository"
 )
 
 var (
@@ -406,7 +406,7 @@ package query
 
 import (
     "context"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
+    "github.com/vpomo/industrial-mcp/internal/domain/service"
 )
 
 type ReadTagQuery struct {
@@ -450,8 +450,8 @@ package command
 
 import (
     "context"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/repository"
+    "github.com/vpomo/industrial-mcp/internal/domain/entity"
+    "github.com/vpomo/industrial-mcp/internal/domain/repository"
 )
 
 type WriteTagCommand struct {
@@ -588,7 +588,7 @@ package opcua
 
 import (
     "context"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+    "github.com/vpomo/industrial-mcp/internal/domain/entity"
     "github.com/google/uuid"
     opcua "github.com/vpomo/go-opcua"
 )
@@ -646,7 +646,7 @@ package repository
 import (
     "context"
     "sync"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+    "github.com/vpomo/industrial-mcp/internal/domain/entity"
 )
 
 type MemoryTagRepository struct {
@@ -770,12 +770,12 @@ import (
     "net/http"
     "sync"
 
-    "github.com/vpomo/mcp_mqtt_opcua/internal/application/command"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/application/query"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/pkg/license"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/pkg/logger"
-    "github.com/vpomo/mcp_mqtt_opcua/internal/pkg/x402"
+    "github.com/vpomo/industrial-mcp/internal/application/command"
+    "github.com/vpomo/industrial-mcp/internal/application/query"
+    "github.com/vpomo/industrial-mcp/internal/infrastructure/repository"
+    "github.com/vpomo/industrial-mcp/internal/pkg/license"
+    "github.com/vpomo/industrial-mcp/internal/pkg/logger"
+    "github.com/vpomo/industrial-mcp/internal/pkg/x402"
 )
 
 type MCPServer struct {
@@ -1414,7 +1414,7 @@ clean:
     rm -rf bin/
 
 docker-build:
-    docker build -t mcp_mqtt_opcua:latest .
+    docker build -t industrial-mcp:latest .
 
 docker-run:
     docker-compose up -d
@@ -1426,8 +1426,8 @@ docker-stop:
 ### Запуск
 ```bash
 # Клонирование и сборка
-git clone https://github.com/vpomo/mcp_mqtt_opcua.git
-cd mcp_mqtt_opcua
+git clone https://github.com/vpomo/industrial-mcp.git
+cd industrial-mcp
 
 # Настройка .env
 cp .env.example .env

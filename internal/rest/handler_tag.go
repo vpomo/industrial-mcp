@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
+	"github.com/vpomo/industrial-mcp/internal/domain/service"
 )
 
 type ExposedTagHandler struct {

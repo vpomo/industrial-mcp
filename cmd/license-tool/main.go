@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/vpomo/mcp_mqtt_opcua/pkg/license"
+	"github.com/vpomo/industrial-mcp/pkg/license"
 )
 
 func main() {

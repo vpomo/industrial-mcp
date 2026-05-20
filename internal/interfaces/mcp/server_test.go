@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vpomo/mcp_mqtt_opcua/internal/application/command"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/application/query"
-	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
-	infrarepo "github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
+	"github.com/vpomo/industrial-mcp/internal/application/command"
+	"github.com/vpomo/industrial-mcp/internal/application/query"
+	"github.com/vpomo/industrial-mcp/internal/domain/service"
+	infrarepo "github.com/vpomo/industrial-mcp/internal/infrastructure/repository"
 )
 
 func TestMCPServerReadWriteTag(t *testing.T) {

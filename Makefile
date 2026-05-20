@@ -16,7 +16,7 @@ clean:
 	rm -rf bin/
 
 docker-build:
-	docker build -t mcp_mqtt_opcua:latest .
+	docker build -tindustrial-mcp:latest .
 
 docker-run:
 	docker-compose up -d
