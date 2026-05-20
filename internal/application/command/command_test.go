@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	infrarepo "github.com/industrial-mcpa/internal/infrastructure/repository"
+	infrarepo "github.com/vpomo/industrial-mcp/internal/infrastructure/repository"
 )
 
 type mockPublisher struct {

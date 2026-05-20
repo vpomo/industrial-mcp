@@ -17,6 +17,7 @@ import (
 	"github.com/vpomo/industrial-mcp/internal/interfaces/mcp"
 	"github.com/vpomo/industrial-mcp/pkg/license"
 	"github.com/vpomo/industrial-mcp/pkg/logger"
+	"github.com/vpomo/industrial-mcp/pkg/x402"
 	"gopkg.in/yaml.v3"
 )
 
@@ -56,6 +57,7 @@ type OPCUAConfig struct {
 type LicenseConfig struct {
 	Enabled       bool   `yaml:"enabled"`
 	PublicKeyPath string `yaml:"public_key_path"`
+	FilePath      string `yaml:"file_path"`
 	CheckInterval int    `yaml:"check_interval"`
 }
 
@@ -132,7 +134,25 @@ func main() {
 	)
 
 	if cfg.License.Enabled {
-		lv, err := license.New(cfg.License.PublicKeyPath)
+		licenseFile := cfg.License.FilePath
+		if licenseFile == "" {
+			licenseFile = "license.dat"
+		}
+
+		var publicKeyPEM []byte
+		if cfg.License.PublicKeyPath != "" {
+			publicKeyPEM, err = os.ReadFile(cfg.License.PublicKeyPath)
+			if err != nil {
+				appLogger.Warn("license public key unreadable", "error", err.Error())
+			}
+		}
+
+		var opts []license.ValidatorOption
+		if cfg.License.CheckInterval > 0 {
+			opts = append(opts, license.WithCheckInterval(time.Duration(cfg.License.CheckInterval)*time.Second))
+		}
+
+		lv, err := license.New(publicKeyPEM, licenseFile, opts...)
 		if err != nil {
 			appLogger.Warn("license system error", "error", err.Error())
 		} else {

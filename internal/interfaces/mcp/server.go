@@ -24,7 +24,7 @@ type MCPServer struct {
 	writeTagH  *command.WriteTagHandler
 	subTagH    *command.SubscribeTagHandler
 	logger     *logger.Logger
-	license    *license.LicenseValidator
+	license    *license.Validator
 	x402       *x402.Handler
 	metrics    *repository.MemoryMetricsRepository
 	mu         sync.RWMutex
@@ -171,7 +171,7 @@ func (s *MCPServer) Start(ctx context.Context) error {
 	return s.httpServer.ListenAndServe()
 }
 
-func (s *MCPServer) SetLicenseValidator(lv *license.LicenseValidator) {
+func (s *MCPServer) SetLicenseValidator(lv *license.Validator) {
 	s.license = lv
 }
 

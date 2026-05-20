@@ -53,7 +53,7 @@ func createLicense(args []string) {
 
 	expiresAt, err := time.Parse("2006-01-02", *expiresFlag)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Invalid date format. Use YYYY-MM-DD\n", err)
+		fmt.Fprintf(os.Stderr, "Invalid date format. Use YYYY-MM-DD: %v\n", err)
 		os.Exit(1)
 	}
 
