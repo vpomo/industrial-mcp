@@ -74,7 +74,7 @@ HWID = SHA256(CPUID + MACAddr + VolumeID + Motherboard)
     "expires_at": "2025-01-15T23:59:59Z",
     "features": ["basic", "pro", "enterprise"],
     "signature": "base64_encoded_rsa_signature",
-    "issuer": "iMatic Licensing"
+    "issuer": "awwantil Licensing"
 }
 ```
 
@@ -151,7 +151,7 @@ ErrFeatureMissing       -> Требуемая функция недоступн�
 ### 6.2 Решение: Обфускация
 ```
 1. Разбить ключ на 4 части
-2. XOR с константой imatic_license_2024_secure_key_factor
+2. XOR с константой awwantil_license_2024_secure_key_factor
 3. Собрать в runtime
 ```
 

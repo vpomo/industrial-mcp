@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/service"
-	infrarepo "github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/repository"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
+	infrarepo "github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
 )
 
 func TestReadTagHandler(t *testing.T) {

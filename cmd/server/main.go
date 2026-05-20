@@ -9,26 +9,26 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/imatic/mcp_mqtt_opcua/internal/application/command"
-	"github.com/imatic/mcp_mqtt_opcua/internal/application/query"
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/service"
-	"github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/mqtt"
-	infrarepo "github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/repository"
-	"github.com/imatic/mcp_mqtt_opcua/internal/interfaces/mcp"
-	"github.com/imatic/mcp_mqtt_opcua/pkg/license"
-	"github.com/imatic/mcp_mqtt_opcua/pkg/x402"
-	"github.com/imatic/mcp_mqtt_opcua/pkg/logger"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/application/command"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/application/query"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/mqtt"
+	infrarepo "github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/interfaces/mcp"
+	"github.com/vpomo/mcp_mqtt_opcua/pkg/license"
+	"github.com/vpomo/mcp_mqtt_opcua/pkg/logger"
+	"github.com/vpomo/
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Server   ServerConfig   `yaml:"server"`
-	MQTT     MQTTConfig    `yaml:"mqtt"`
-	OPCUA    OPCUAConfig   `yaml:"opcua"`
-	License  LicenseConfig  `yaml:"license"`
-	X402     X402Config    `yaml:"x402"`
-	Metrics  MetricsConfig `yaml:"metrics"`
-	Logging  LoggingConfig `yaml:"logging"`
+	Server  ServerConfig  `yaml:"server"`
+	MQTT    MQTTConfig    `yaml:"mqtt"`
+	OPCUA   OPCUAConfig   `yaml:"opcua"`
+	License LicenseConfig `yaml:"license"`
+	X402    X402Config    `yaml:"x402"`
+	Metrics MetricsConfig `yaml:"metrics"`
+	Logging LoggingConfig `yaml:"logging"`
 }
 
 type ServerConfig struct {
@@ -55,9 +55,9 @@ type OPCUAConfig struct {
 }
 
 type LicenseConfig struct {
-	Enabled        bool   `yaml:"enabled"`
-	PublicKeyPath  string `yaml:"public_key_path"`
-	CheckInterval  int    `yaml:"check_interval"`
+	Enabled       bool   `yaml:"enabled"`
+	PublicKeyPath string `yaml:"public_key_path"`
+	CheckInterval int    `yaml:"check_interval"`
 }
 
 type X402Config struct {
@@ -115,12 +115,12 @@ func main() {
 	subTagH := command.NewSubscribeTagHandler(mqttClient)
 
 	mcpServerCfg := &mcp.Config{
-		ListenAddr:            cfg.Server.Host + ":" + itoa(cfg.Server.Port),
-		LogLevel:              cfg.Logging.Level,
-		MetricsFile:           cfg.Metrics.File,
-		X402Enabled:           cfg.X402.Enabled,
-		X402PaymentAddress:    cfg.X402.PaymentAddress,
-		LicensePublicKeyPath:  cfg.License.PublicKeyPath,
+		ListenAddr:           cfg.Server.Host + ":" + itoa(cfg.Server.Port),
+		LogLevel:             cfg.Logging.Level,
+		MetricsFile:          cfg.Metrics.File,
+		X402Enabled:          cfg.X402.Enabled,
+		X402PaymentAddress:   cfg.X402.PaymentAddress,
+		LicensePublicKeyPath: cfg.License.PublicKeyPath,
 	}
 
 	server := mcp.NewMCPServer(

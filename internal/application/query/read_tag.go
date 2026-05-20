@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/service"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
 )
 
 type ReadTagQuery struct {

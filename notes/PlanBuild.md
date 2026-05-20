@@ -60,7 +60,7 @@
 ## 2. Структура проекта
 
 ```
-/home/user/imatic/mcp_mqtt_opcua/
+/home/user/vpomo/mcp_mqtt_opcua/
 ├── cmd/
 │   └── server/
 │       └── main.go                 # Точка входа
@@ -128,13 +128,13 @@
 
 #### 3.1.1 Инициализация Go модуля
 ```bash
-go mod init github.com/imatic/mcp_mqtt_opcua
+go mod init github.com/vpomo/mcp_mqtt_opcua
 ```
 
 #### 3.1.2 Создание go.mod с зависимостями
 ```go
 // go.mod
-module github.com/imatic/mcp_mqtt_opcua
+module github.com/vpomo/mcp_mqtt_opcua
 
 go 1.26
 
@@ -314,7 +314,7 @@ func (l *License) HasFeature(feature string) bool {
 ```go
 package repository
 
-import "github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
+import "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
 
 type TagReader interface {
     GetByID(ctx context.Context, id string) (*entity.Tag, error)
@@ -362,8 +362,8 @@ package service
 import (
     "context"
     "errors"
-    "github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
-    "github.com/imatic/mcp_mqtt_opcua/internal/domain/repository"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/repository"
 )
 
 var (
@@ -406,7 +406,7 @@ package query
 
 import (
     "context"
-    "github.com/imatic/mcp_mqtt_opcua/internal/domain/service"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
 )
 
 type ReadTagQuery struct {
@@ -450,8 +450,8 @@ package command
 
 import (
     "context"
-    "github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
-    "github.com/imatic/mcp_mqtt_opcua/internal/domain/repository"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/repository"
 )
 
 type WriteTagCommand struct {
@@ -588,9 +588,9 @@ package opcua
 
 import (
     "context"
-    "github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
     "github.com/google/uuid"
-    opcua "github.com/imatic/go-opcua"
+    opcua "github.com/vpomo/go-opcua"
 )
 
 type OPCUAClient struct {
@@ -646,7 +646,7 @@ package repository
 import (
     "context"
     "sync"
-    "github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
 )
 
 type MemoryTagRepository struct {
@@ -770,12 +770,12 @@ import (
     "net/http"
     "sync"
 
-    "github.com/imatic/mcp_mqtt_opcua/internal/application/command"
-    "github.com/imatic/mcp_mqtt_opcua/internal/application/query"
-    "github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/repository"
-    "github.com/imatic/mcp_mqtt_opcua/internal/pkg/license"
-    "github.com/imatic/mcp_mqtt_opcua/internal/pkg/logger"
-    "github.com/imatic/mcp_mqtt_opcua/internal/pkg/x402"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/application/command"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/application/query"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/pkg/license"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/pkg/logger"
+    "github.com/vpomo/mcp_mqtt_opcua/internal/pkg/x402"
 )
 
 type MCPServer struct {
@@ -1426,7 +1426,7 @@ docker-stop:
 ### Запуск
 ```bash
 # Клонирование и сборка
-git clone https://github.com/imatic/mcp_mqtt_opcua.git
+git clone https://github.com/vpomo/mcp_mqtt_opcua.git
 cd mcp_mqtt_opcua
 
 # Настройка .env

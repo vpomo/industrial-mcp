@@ -26,8 +26,8 @@
 ### Шаг 1: Создать директорию для ключей
 
 ```bash
-mkdir -p /opt/imatic-license/keys
-cd /opt/imatic-license/keys
+mkdir -p /opt/awwantil-license/keys
+cd /opt/awwantil-license/keys
 ```
 
 ### Шаг 2: Генерировать закрытый ключ
@@ -68,8 +68,8 @@ openssl rsa -in private.pem -check
 Клиент запускает команду:
 
 ```bash
-cd /opt/imatic-license
-./imatic-license export-hwid
+cd /opt/awwantil-license
+./awwantil-license export-hwid
 ```
 
 Результат:
@@ -82,7 +82,7 @@ Hardware ID: A1B2C3D4E5F67890...
 ### Шаг 2: Создать файл лицензии
 
 ```bash
-cd /opt/imatic-license
+cd /opt/awwantil-license
 ./license-generator create \
     --hardware-hash A1B2C3D4E5F67890 \
     --expires 2025-12-31 \
@@ -145,7 +145,7 @@ cat /app/license/license.dat
     "expires_at": "2025-12-31T23:59:59Z",
     "features": ["basic", "pro", "enterprise"],
     "signature": "base64_encoded_signature...",
-    "issuer": "iMatic Licensing"
+    "issuer": "awwantil Licensing"
 }
 ```
 
@@ -172,13 +172,13 @@ curl http://localhost:8080/api/v1/license/status
 ### Через CLI
 
 ```bash
-./imatic-license verify
+./awwantil-license verify
 ```
 
 ### Получить HWID машины
 
 ```bash
-./imatic-license export-hwid
+./awwantil-license export-hwid
 ```
 
 ---
@@ -200,7 +200,7 @@ sudo chmod 644 /app/license/license.dat
 **Причина**: HWID машины не совпадает с HWID в лицензии.
 
 **Решение**:
-1. Проверить HWID машины: `./imatic-license export-hwid`
+1. Проверить HWID машины: `./awwantil-license export-hwid`
 2. Сравнить с HWID в файле лицензии
 3. Если машина была изменена (новая материнская плата, сетевая карта) — нужна новая лицензия
 
@@ -315,7 +315,7 @@ ls -la /app/license/license.dat
 
 A: Использовать команду верификации:
 ```bash
-./imatic-license verify --file /app/license/license.dat --verbose
+./awwantil-license verify --file /app/license/license.dat --verbose
 ```
 
 ### Q: Сколько стоит генерация лицензии?

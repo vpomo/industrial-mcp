@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	infrarepo "github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/repository"
+	infrarepo "github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
 )
 
 type mockPublisher struct {

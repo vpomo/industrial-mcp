@@ -5,7 +5,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
 )
 
 var ErrExposedTagNotFound = errors.New("exposed tag not found")

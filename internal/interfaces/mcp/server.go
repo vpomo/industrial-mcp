@@ -9,12 +9,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/imatic/mcp_mqtt_opcua/internal/application/command"
-	"github.com/imatic/mcp_mqtt_opcua/internal/application/query"
-	"github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/repository"
-	"github.com/imatic/mcp_mqtt_opcua/pkg/license"
-	"github.com/imatic/mcp_mqtt_opcua/pkg/logger"
-	"github.com/imatic/mcp_mqtt_opcua/pkg/x402"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/application/command"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/application/query"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/repository"
+	"github.com/vpomo/mcp_mqtt_opcua/pkg/license"
+	"github.com/vpomo/mcp_mqtt_opcua/pkg/logger"
+	"github.com/vpomo/mcp_mqtt_opcua/pkg/x402"
 )
 
 type MCPServer struct {
@@ -62,7 +62,7 @@ func NewMCPServer(
 	metricsRepo *repository.MemoryMetricsRepository,
 ) *MCPServer {
 	return &MCPServer{
-		cfg:        cfg,
+		cfg:       cfg,
 		readTagH:  readTagH,
 		writeTagH: writeTagH,
 		subTagH:   subTagH,

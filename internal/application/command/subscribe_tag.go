@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/mqtt"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/mqtt"
 )
 
 type SubscribeTagCommand struct {

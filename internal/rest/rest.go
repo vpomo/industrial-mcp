@@ -3,9 +3,9 @@ package rest
 import (
 	"net/http"
 
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/repository"
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/service"
-	"github.com/imatic/mcp_mqtt_opcua/internal/infrastructure/driver"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/repository"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/infrastructure/driver"
 )
 
 type Server struct {

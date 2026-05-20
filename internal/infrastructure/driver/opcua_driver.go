@@ -5,7 +5,7 @@ import (
 
 	"github.com/gopcua/opcua"
 	"github.com/gopcua/opcua/ua"
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
 )
 
 type OPCUADriver struct {

@@ -3,7 +3,7 @@ package mcp
 import (
 	"context"
 
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/service"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/service"
 )
 
 type TagServiceWrapper struct {

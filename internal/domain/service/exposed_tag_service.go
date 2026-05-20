@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/entity"
-	"github.com/imatic/mcp_mqtt_opcua/internal/domain/repository"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/entity"
+	"github.com/vpomo/mcp_mqtt_opcua/internal/domain/repository"
 )
 
 var (
-	ErrDriverNotFound = errors.New("driver not found for data source type")
-	ErrNotConnected   = errors.New("data source not connected")
+	ErrDriverNotFound       = errors.New("driver not found for data source type")
+	ErrNotConnected         = errors.New("data source not connected")
 	ErrDataSourceIDRequired = errors.New("data source ID is required")
 )
 

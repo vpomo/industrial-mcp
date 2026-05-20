@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-const obfuscationKey = "imatic_license_2024_secure_key_factor"
+const obfuscationKey = "awwantil_license_2024_secure_key_factor"
 
 type ObfuscatedKey struct {
 	parts []string

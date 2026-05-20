@@ -1,4 +1,4 @@
-module github.com/imatic/mcp_mqtt_opcua
+module github.com/vpomo/mcp_mqtt_opcua
 
 go 1.26
 

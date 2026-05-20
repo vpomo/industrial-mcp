@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/imatic/mcp_mqtt_opcua/pkg/license"
+	"github.com/vpomo/mcp_mqtt_opcua/pkg/license"
 )
 
 func main() {
@@ -59,7 +59,7 @@ func createLicense(args []string) {
 
 	features := parseFeatures(*featuresFlag)
 
-	lf, err := generator.Create(*hwidFlag, expiresAt, features, "iMatic Licensing")
+	lf, err := generator.Create(*hwidFlag, expiresAt, features, "awwantil Licensing")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error creating license: %v\n", err)
 		os.Exit(1)
