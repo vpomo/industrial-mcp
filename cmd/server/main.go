@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
 
@@ -57,8 +58,6 @@ type OPCUAConfig struct {
 type LicenseConfig struct {
 	Enabled       bool   `yaml:"enabled"`
 	PublicKeyPath string `yaml:"public_key_path"`
-	FilePath      string `yaml:"file_path"`
-	CheckInterval int    `yaml:"check_interval"`
 }
 
 type X402Config struct {
@@ -77,17 +76,27 @@ type LoggingConfig struct {
 	Format string `yaml:"format"`
 }
 
+const licenseCheckInterval = 20 * time.Minute
+
 func main() {
-	configPath := flag.String("config", "configs/config.yaml", "path to config file")
+	configPath := flag.String("config", "cmd/server/config.yaml", "path to config file")
 	flag.Parse()
 
-	cfg, err := loadConfig(*configPath)
+	absConfigPath, err := filepath.Abs(*configPath)
+	if err != nil {
+		log.Fatalf("failed to resolve config path: %v", err)
+	}
+
+	cfg, err := loadConfig(absConfigPath)
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
 	appLogger := logger.New(cfg.Logging.Level)
 	appLogger.Info("starting MCP server")
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	tagRepo := infrarepo.NewMemoryTagRepository()
 
@@ -134,39 +143,40 @@ func main() {
 	)
 
 	if cfg.License.Enabled {
-		licenseFile := cfg.License.FilePath
-		if licenseFile == "" {
-			licenseFile = "license.dat"
-		}
+		licenseFile := licensePathBesideConfig(absConfigPath)
 
 		var publicKeyPEM []byte
 		if cfg.License.PublicKeyPath != "" {
-			publicKeyPEM, err = os.ReadFile(cfg.License.PublicKeyPath)
+			publicKeyPath := resolvePathBesideConfig(absConfigPath, cfg.License.PublicKeyPath)
+			publicKeyPEM, err = os.ReadFile(publicKeyPath)
 			if err != nil {
-				appLogger.Warn("license public key unreadable", "error", err.Error())
+				log.Fatalf("failed to read license public key %s: %v", publicKeyPath, err)
 			}
 		}
 
-		var opts []license.ValidatorOption
-		if cfg.License.CheckInterval > 0 {
-			opts = append(opts, license.WithCheckInterval(time.Duration(cfg.License.CheckInterval)*time.Second))
+		lv, err := license.New(
+			publicKeyPEM,
+			licenseFile,
+			license.WithCheckInterval(licenseCheckInterval),
+		)
+		if err != nil {
+			log.Fatalf("license system error: %v", err)
 		}
 
-		lv, err := license.New(publicKeyPEM, licenseFile, opts...)
-		if err != nil {
-			appLogger.Warn("license system error", "error", err.Error())
-		} else {
-			server.SetLicenseValidator(lv)
+		if err := lv.Validate(); err != nil {
+			log.Fatalf("license validation failed at startup (%s): %v", licenseFile, err)
 		}
+
+		server.SetLicenseValidator(lv)
+		appLogger.Info("license validated", "file", licenseFile)
+
+		go runPeriodicLicenseCheck(ctx, cancel, appLogger, lv, licenseFile, licenseCheckInterval)
 	}
 
 	if cfg.X402.Enabled {
 		x402Handler := x402.NewHandler(cfg.X402.Enabled, cfg.X402.PaymentAddress)
 		server.SetX402Handler(x402Handler)
 	}
-
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 
 	go func() {
 		if err := server.Start(ctx); err != nil {
@@ -185,6 +195,47 @@ func main() {
 	cancel()
 
 	time.Sleep(time.Second)
+}
+
+func runPeriodicLicenseCheck(
+	ctx context.Context,
+	cancel context.CancelFunc,
+	appLogger *logger.Logger,
+	lv *license.Validator,
+	licenseFile string,
+	interval time.Duration,
+) {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			if err := lv.Validate(); err != nil {
+				appLogger.Error(
+					"periodic license validation failed",
+					"file", licenseFile,
+					"error", err.Error(),
+				)
+				cancel()
+				return
+			}
+			appLogger.Info("periodic license validation ok", "file", licenseFile)
+		case <-ctx.Done():
+			return
+		}
+	}
+}
+
+func licensePathBesideConfig(configPath string) string {
+	return filepath.Join(filepath.Dir(configPath), "license.dat")
+}
+
+func resolvePathBesideConfig(configPath, p string) string {
+	if filepath.IsAbs(p) {
+		return p
+	}
+	return filepath.Join(filepath.Dir(configPath), p)
 }
 
 func loadConfig(path string) (*Config, error) {

@@ -20,9 +20,7 @@ opcua:
 
 license:
   enabled: true
-  public_key_path: "pkg/license/keys/public.pem"
-  file_path: "license.dat"
-  check_interval: 3600
+  public_key_path: "key/public.pem"
 
 x402:
   enabled: true
