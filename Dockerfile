@@ -12,15 +12,16 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /server ./cmd/server
 
 FROM alpine:3.20
 
-RUN apk --no-cache add ca-certificates tzdata
+RUN apk --no-cache add ca-certificates tzdata wget
 
 WORKDIR /app
 
 COPY --from=builder /server /app/server
-COPY configs /app/configs
-COPY pkg /app/pkg
+COPY cmd/server/config.yaml /app/config.yaml
+COPY cmd/server/license.dat /app/license.dat
+COPY cmd/server/key/public.pem /app/key/public.pem
 
 ENV GIN_MODE=release
 EXPOSE 8080
 
-CMD ["/app/server"]
+CMD ["/app/server", "-config", "/app/config.yaml"]

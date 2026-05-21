@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "hardware_hash": "e117aa4fbb33ea4fcbcd6fe5bd1c31315687e06272467d294d23e35331875587",
-  "issued_at": "2026-05-20T19:24:03.754029463+03:00",
+  "hardware_hash": "b6245a2d81a2c9ea957623fa9d8b7423666a7c72121d56edba3537f10afefb0e",
+  "issued_at": "2026-05-21T17:06:14.077088861+03:00",
   "expires_at": "2026-12-31T00:00:00Z",
   "features": [
     "basic",
     "pro",
     "enterprise"
   ],
-  "signature": "GkXyd5j16a6RkcWdXL6kB4AsdM/E+zk697GwiYTw2DLjWRBFfcmSzEpiel4Ngj+r922iC6LeI+MkHrPDad56F5fsZR6WYHIlhW3rlhfGBbTXTLGpMNG35RU19TI9k/g4qgh17LIdiSRFEELTUFH2twKBcG8gkWCanbiXWar6kH5xQ2t9SubTadDcPZFYJRMf0eYIiF+UmY01qGhYchlTezuqXmHRZvs22Scg9wy2HZjUE/56Jzr+/PqGUtKRBRHA4tVC2iWCSx8H08V96utnXubbuGkQ9Fs2iM5qGK5M1X71Ki2mnD8H4gVVhZUsfAy68UrPDX0QeCe6PJn3BtO49g==",
+  "signature": "JLZ4mjOD2wgpjo/eZmlQY9k84jUEd49JUAAGWZFS2nTI4y59FdF0WT2x0LbeaZEf65uc+KG88+Eywcn6CTljH5YyysFWUEf/Ieuqi1Nq0i/WAtEErXZYlFM7lknMorSIG8VvcG/MjyemAP47JP7q0rO44aaS/lIGrexRBERV1gt5ZJU2pFEhR8M/PkPxnu4vDq7TxEhqdaKjPUOgVc01VU3VP7TxxBz3mmFkCqmJ2HAiGHz+NoEEAWvqPM6tUDuH/9P6QTU02gHvlIVeSHxW4SiNKXlZjqZifbv6srGjF/GU70f7vW/jL35dR85l50b4JAs7iGSJruthnQkPqReviA==",
   "issuer": "awwantil Licensing"
 }

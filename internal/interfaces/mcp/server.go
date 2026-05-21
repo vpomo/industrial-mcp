@@ -12,6 +12,7 @@ import (
 	"github.com/vpomo/industrial-mcp/internal/application/command"
 	"github.com/vpomo/industrial-mcp/internal/application/query"
 	"github.com/vpomo/industrial-mcp/internal/infrastructure/repository"
+	lichandler "github.com/vpomo/industrial-mcp/internal/rest/c_license"
 	"github.com/vpomo/industrial-mcp/pkg/license"
 	"github.com/vpomo/industrial-mcp/pkg/logger"
 	"github.com/vpomo/industrial-mcp/pkg/x402"
@@ -23,9 +24,10 @@ type MCPServer struct {
 	readTagH   *query.ReadTagHandler
 	writeTagH  *command.WriteTagHandler
 	subTagH    *command.SubscribeTagHandler
-	logger     *logger.Logger
-	license    *license.Validator
-	x402       *x402.Handler
+	logger          *logger.Logger
+	license         *license.Validator
+	licenseHandler  *lichandler.LicenseHandler
+	x402            *x402.Handler
 	metrics    *repository.MemoryMetricsRepository
 	mu         sync.RWMutex
 }
@@ -173,6 +175,7 @@ func (s *MCPServer) Start(ctx context.Context) error {
 
 func (s *MCPServer) SetLicenseValidator(lv *license.Validator) {
 	s.license = lv
+	s.licenseHandler = lichandler.NewLicenseHandler(lv)
 }
 
 func (s *MCPServer) SetX402Handler(xh *x402.Handler) {

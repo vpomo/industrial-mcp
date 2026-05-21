@@ -11,6 +11,7 @@ import (
 	"github.com/vpomo/industrial-mcp/internal/application/query"
 	"github.com/vpomo/industrial-mcp/internal/domain/service"
 	infrarepo "github.com/vpomo/industrial-mcp/internal/infrastructure/repository"
+	"github.com/vpomo/industrial-mcp/pkg/license"
 )
 
 func TestMCPServerReadWriteTag(t *testing.T) {
@@ -138,5 +139,38 @@ func TestMCPServerWriteAndReadTag(t *testing.T) {
 
 	if writer.Code != http.StatusOK {
 		t.Errorf("expected status 200, got %d", writer.Code)
+	}
+}
+
+func TestMCPServerLicenseHWIDEndpoint(t *testing.T) {
+	metricsRepo, _ := infrarepo.NewMemoryMetricsRepository("")
+	cfg := &Config{ListenAddr: "127.0.0.1:0", LogLevel: "debug"}
+	server := NewMCPServer(cfg, nil, nil, nil, nil, metricsRepo)
+
+	lv, err := license.New(nil, "missing-license.dat")
+	if err != nil {
+		t.Fatalf("failed to create license validator: %v", err)
+	}
+	server.SetLicenseValidator(lv)
+
+	writer := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/license/hwid", nil)
+	server.ServeHTTP(writer, req)
+
+	if writer.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", writer.Code)
+	}
+
+	var resp struct {
+		HardwareHash string `json:"hardware_hash"`
+	}
+	if err := json.Unmarshal(writer.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+	if resp.HardwareHash == "" {
+		t.Fatal("expected non-empty hardware_hash")
+	}
+	if resp.HardwareHash != lv.GetHWID() {
+		t.Fatalf("expected hwid %s, got %s", lv.GetHWID(), resp.HardwareHash)
 	}
 }

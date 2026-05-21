@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+
+	"github.com/vpomo/industrial-mcp/pkg/license"
 )
 
 type LicenseHandler struct {
@@ -14,6 +16,7 @@ type Validator interface {
 	IsEnabled() bool
 	Validate() error
 	GetHWID() string
+	GetHardwareInfo() license.HardwareInfo
 	GetLicenseStatus() (bool, time.Time, []string)
 	ValidateFeature(feature string) error
 }
@@ -28,6 +31,10 @@ type LicenseStatusResponse struct {
 
 type HWIDResponse struct {
 	HardwareHash string `json:"hardware_hash"`
+	CPUID        string `json:"cpuid,omitempty"`
+	MAC          string `json:"mac,omitempty"`
+	VolumeID     string `json:"volume_id,omitempty"`
+	Motherboard  string `json:"motherboard,omitempty"`
 }
 
 type ErrorResponse struct {
@@ -66,9 +73,15 @@ func (h *LicenseHandler) Status(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *LicenseHandler) HWID(w http.ResponseWriter, r *http.Request) {
-	hwid := h.validator.GetHWID()
+	hw := h.validator.GetHardwareInfo()
 
-	resp := HWIDResponse{HardwareHash: hwid}
+	resp := HWIDResponse{
+		HardwareHash: hw.Hash(),
+		CPUID:        hw.CPUID,
+		MAC:          hw.MACAddr,
+		VolumeID:     hw.VolumeID,
+		Motherboard:  hw.Motherboard,
+	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
 }

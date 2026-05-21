@@ -163,14 +163,18 @@ func main() {
 			log.Fatalf("license system error: %v", err)
 		}
 
-		if err := lv.Validate(); err != nil {
-			log.Fatalf("license validation failed at startup (%s): %v", licenseFile, err)
-		}
-
 		server.SetLicenseValidator(lv)
-		appLogger.Info("license validated", "file", licenseFile)
 
-		go runPeriodicLicenseCheck(ctx, cancel, appLogger, lv, licenseFile, licenseCheckInterval)
+		if err := lv.Validate(); err != nil {
+			appLogger.Warn(
+				"license validation failed at startup; MCP requests will be rejected until license is fixed",
+				"file", licenseFile,
+				"error", err.Error(),
+			)
+		} else {
+			appLogger.Info("license validated", "file", licenseFile)
+			go runPeriodicLicenseCheck(ctx, cancel, appLogger, lv, licenseFile, licenseCheckInterval)
+		}
 	}
 
 	if cfg.X402.Enabled {

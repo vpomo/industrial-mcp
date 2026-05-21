@@ -12,6 +12,20 @@ func (s *MCPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if s.licenseHandler != nil {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/api/v1/license/hwid":
+			s.licenseHandler.HWID(w, r)
+			return
+		case r.Method == http.MethodGet && r.URL.Path == "/api/v1/license/status":
+			s.licenseHandler.Status(w, r)
+			return
+		case r.Method == http.MethodGet && r.URL.Path == "/api/v1/license/check":
+			s.licenseHandler.CheckFeature(w, r)
+			return
+		}
+	}
+
 	if r.Header.Get("Content-Type") != "application/json" {
 		http.Error(w, "application/json required", http.StatusBadRequest)
 		return

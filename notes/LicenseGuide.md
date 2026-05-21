@@ -74,9 +74,9 @@ cd /opt/mcp-license
 
 Результат:
 ```
-Hardware ID: e117aa4fbb33ea4fcbcd6fe5bd1c31315687e06272467d294d23e35331875587
+Hardware ID: b6245a2d81a2c9ea957623fa9d8b7423666a7c72121d56edba3537f10afefb0e
   CPUID: 2170e3a77c784e029c4d45c226e1fe28
-  MAC: 00:15:5d:63:50:17
+  MAC: 00:15:5d:63:55:67
   VolumeID:
   Motherboard: 2170e3a77c784e029c4d45c226e1fe28
 ```
@@ -88,7 +88,7 @@ Hardware ID: e117aa4fbb33ea4fcbcd6fe5bd1c31315687e06272467d294d23e35331875587
 ```bash
 cd /opt/mcp-license
 ./license-tool create \
-    --hardware-hash e117aa4fbb33ea4fcbcd6fe5bd1c31315687e06272467d294d23e35331875587 \
+    --hardware-hash b6245a2d81a2c9ea957623fa9d8b7423666a7c72121d56edba3537f10afefb0e \
     --expires 2026-12-31 \
     --features basic,pro,enterprise \
     --output ./tmp/license.dat
@@ -344,3 +344,24 @@ A: Да, один закрытый ключ издателя может гене
 - Логом ошибок (`/app/logs/`)
 - HWID машины
 - Файлом license.dat (если не повреждён)
+
+#### Для Docker:
+
+# первый запуск — создаст machine-id
+```bash
+make docker-run
+```
+
+# получить HWID для выпуска лицензии
+```bash
+make docker-hwid-offline
+```
+или
+```bash
+make docker-hwid
+```
+
+# выпустить license.dat с этим hardware_hash, положить в cmd/server/license.dat перезапустить
+```bash
+docker-compose restart
+```

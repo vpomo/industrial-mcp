@@ -134,6 +134,10 @@ func (v *Validator) GetHWID() string {
 	return v.hardware.Hash()
 }
 
+func (v *Validator) GetHardwareInfo() HardwareInfo {
+	return v.hardware
+}
+
 func (v *Validator) GetLicenseStatus() (bool, time.Time, []string) {
 	v.mu.RLock()
 	defer v.mu.RUnlock()
