@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"net"
 	"net/http"
 	"sync"
 	"time"
@@ -19,17 +21,17 @@ import (
 )
 
 type MCPServer struct {
-	httpServer *http.Server
-	cfg        *Config
-	readTagH   *query.ReadTagHandler
-	writeTagH  *command.WriteTagHandler
-	subTagH    *command.SubscribeTagHandler
-	logger          *logger.Logger
-	license         *license.Validator
-	licenseHandler  *lichandler.LicenseHandler
-	x402            *x402.Handler
-	metrics    *repository.MemoryMetricsRepository
-	mu         sync.RWMutex
+	httpServer     *http.Server
+	cfg            *Config
+	readTagH       *query.ReadTagHandler
+	writeTagH      *command.WriteTagHandler
+	subTagH        *command.SubscribeTagHandler
+	logger         *logger.Logger
+	license        *license.Validator
+	licenseHandler *lichandler.LicenseHandler
+	x402           *x402.Handler
+	metrics        *repository.MemoryMetricsRepository
+	mu             sync.RWMutex
 }
 
 type MCPRequest struct {
@@ -165,12 +167,31 @@ func (s *MCPServer) HandleRequest(ctx context.Context, req MCPRequest) (*MCPResp
 	}, nil
 }
 
-func (s *MCPServer) Start(ctx context.Context) error {
+func (s *MCPServer) Start(ctx context.Context, ready chan<- struct{}) error {
+	ln, err := net.Listen("tcp", s.cfg.ListenAddr)
+	if err != nil {
+		return fmt.Errorf("listen %s: %w", s.cfg.ListenAddr, err)
+	}
+
 	s.httpServer = &http.Server{
-		Addr:    s.cfg.ListenAddr,
 		Handler: s,
 	}
-	return s.httpServer.ListenAndServe()
+
+	s.logger.Info("server listening", "addr", ln.Addr().String())
+	close(ready)
+
+	go func() {
+		<-ctx.Done()
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		s.httpServer.Shutdown(shutdownCtx)
+	}()
+
+	err = s.httpServer.Serve(ln)
+	if errors.Is(err, http.ErrServerClosed) {
+		return nil
+	}
+	return err
 }
 
 func (s *MCPServer) SetLicenseValidator(lv *license.Validator) {

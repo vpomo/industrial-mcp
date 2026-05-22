@@ -2,6 +2,7 @@ package mqtt
 
 import (
 	"context"
+	"reflect"
 	"sync"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -13,6 +14,19 @@ type TagSubscriber interface {
 
 type PublishPublisher interface {
 	Publish(ctx context.Context, topic string, payload []byte) error
+}
+
+func IsNil(v interface{}) bool {
+	if v == nil {
+		return true
+	}
+	rv := reflect.ValueOf(v)
+	switch rv.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
+		return rv.IsNil()
+	default:
+		return false
+	}
 }
 
 type MQTTClient struct {

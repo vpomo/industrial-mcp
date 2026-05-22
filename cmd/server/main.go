@@ -121,8 +121,16 @@ func main() {
 	}
 
 	readTagH := query.NewReadTagHandler(tagService)
-	writeTagH := command.NewWriteTagHandler(tagRepo, mqttClient)
-	subTagH := command.NewSubscribeTagHandler(mqttClient)
+
+	var mqttPublisher mqtt.PublishPublisher
+	var mqttSubscriber mqtt.TagSubscriber
+	if mqttClient != nil {
+		mqttPublisher = mqttClient
+		mqttSubscriber = mqttClient
+	}
+
+	writeTagH := command.NewWriteTagHandler(tagRepo, mqttPublisher)
+	subTagH := command.NewSubscribeTagHandler(mqttSubscriber)
 
 	mcpServerCfg := &mcp.Config{
 		ListenAddr:           cfg.Server.Host + ":" + itoa(cfg.Server.Port),
@@ -182,18 +190,33 @@ func main() {
 		server.SetX402Handler(x402Handler)
 	}
 
+	ready := make(chan struct{})
+	errCh := make(chan error, 1)
 	go func() {
-		if err := server.Start(ctx); err != nil {
-			appLogger.Error("server error", "error", err.Error())
-			cancel()
-		}
+		errCh <- server.Start(ctx, ready)
 	}()
 
-	appLogger.Info("server started", "addr", mcpServerCfg.ListenAddr)
+	select {
+	case err := <-errCh:
+		log.Fatalf(
+			"failed to start server on %s: %v\nstop the process using this port (GoLand: red Stop button, or: fuser -k %d/tcp)",
+			mcpServerCfg.ListenAddr,
+			err,
+			cfg.Server.Port,
+		)
+	case <-ready:
+	}
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
+
+	select {
+	case <-quit:
+	case err := <-errCh:
+		if err != nil {
+			appLogger.Error("server error", "error", err.Error())
+		}
+	}
 
 	appLogger.Info("shutting down server")
 	cancel()

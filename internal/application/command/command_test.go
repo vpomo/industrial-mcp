@@ -84,6 +84,23 @@ func TestWriteTagHandlerNilPublisher(t *testing.T) {
 	}
 }
 
+func TestWriteTagHandlerTypedNilPublisher(t *testing.T) {
+	repo := infrarepo.NewMemoryTagRepository()
+	var publisher *mockPublisher
+	h := NewWriteTagHandler(repo, publisher)
+
+	resp, err := h.Handle(context.Background(), WriteTagCommand{
+		TagName: "sensor",
+		Value:   100,
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if !resp.Success {
+		t.Error("expected success=true")
+	}
+}
+
 func TestWriteTagHandlerEmptyName(t *testing.T) {
 	repo := infrarepo.NewMemoryTagRepository()
 	publisher := &mockPublisher{}

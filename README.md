@@ -64,3 +64,23 @@ go test -v -cover ./...
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o license-tool ./cmd/license-tool
 CGO_ENABLED=0 CC=x86_64-w64-mingw32-gcc GOOS=windows GOARCH=amd64 -o license-tool ./cmd/license-tool
 ```
+
+
+#### Для subscribe_tag и MQTT-уведомлений — поднять брокер, например Mosquitto:
+```bash
+docker run -d --name mosquitto -p 1883:1883 eclipse-mosquitto
+```
+#### В config.yaml:
+
+```json
+mqtt:
+  broker_url: "tcp://localhost:1883"
+```
+
+Итог: брокер = транспорт сообщений, не источник данных. Источники — OPC UA, Modbus и т.д.
+Брокер нужен, если:
+- несколько систем должны узнавать об изменениях без опроса MCP
+- нужен pub/sub между сервисами
+Не нужен, если:
+- один клиент пишет/читает через HTTP JSON-RPC (write_tag / read_tag)
+

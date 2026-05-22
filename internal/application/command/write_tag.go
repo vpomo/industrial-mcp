@@ -36,7 +36,7 @@ func (h *WriteTagHandler) Handle(ctx context.Context, cmd WriteTagCommand) (*Wri
 	if err := h.repo.Save(ctx, tag); err != nil {
 		return nil, err
 	}
-	if h.publisher != nil {
+	if !mqtt.IsNil(h.publisher) {
 		payload, _ := json.Marshal(tag)
 		h.publisher.Publish(ctx, "mcp/tag/written", payload)
 	}

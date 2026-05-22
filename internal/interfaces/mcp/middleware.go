@@ -3,10 +3,18 @@ package mcp
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 )
 
 func (s *MCPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/health" {
+	path := strings.TrimSuffix(r.URL.Path, "/")
+	if path == "" {
+		path = "/"
+	}
+
+	if path == "/health" {
+		s.logger.Info("health check", "method", r.Method, "remote", r.RemoteAddr)
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"status":"ok"}`))
 		return

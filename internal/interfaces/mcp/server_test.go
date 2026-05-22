@@ -59,15 +59,19 @@ func TestMCPServerHealthEndpoint(t *testing.T) {
 	cfg := &Config{ListenAddr: "127.0.0.1:0", LogLevel: "debug"}
 	server := NewMCPServer(cfg, nil, nil, nil, nil, metricsRepo)
 
-	writer := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/health", nil)
-	server.ServeHTTP(writer, req)
+	for _, path := range []string{"/health", "/health/"} {
+		t.Run(path, func(t *testing.T) {
+			writer := httptest.NewRecorder()
+			req, _ := http.NewRequest("GET", path, nil)
+			server.ServeHTTP(writer, req)
 
-	if writer.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", writer.Code)
-	}
-	if !strings.Contains(writer.Body.String(), "ok") {
-		t.Errorf("expected 'ok' in response, got %s", writer.Body.String())
+			if writer.Code != http.StatusOK {
+				t.Errorf("expected status 200, got %d", writer.Code)
+			}
+			if !strings.Contains(writer.Body.String(), "ok") {
+				t.Errorf("expected 'ok' in response, got %s", writer.Body.String())
+			}
+		})
 	}
 }
 

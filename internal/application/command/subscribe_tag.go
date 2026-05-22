@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	"github.com/vpomo/industrial-mcp/internal/infrastructure/mqtt"
@@ -26,6 +27,10 @@ type SubscribeTagResponse struct {
 }
 
 func (h *SubscribeTagHandler) Handle(ctx context.Context, cmd SubscribeTagCommand) (*SubscribeTagResponse, error) {
+	if mqtt.IsNil(h.subscriber) {
+		return nil, errors.New("mqtt not available")
+	}
+
 	subID := uuid.New().String()
 	topic := "mcp/tag/" + cmd.TagName
 	err := h.subscriber.Subscribe(ctx, topic, func(data []byte) {
