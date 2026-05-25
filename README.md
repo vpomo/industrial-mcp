@@ -84,3 +84,9 @@ mqtt:
 Не нужен, если:
 - один клиент пишет/читает через HTTP JSON-RPC (write_tag / read_tag)
 
+
+Для subscribe_tag и MQTT-уведомлений — поднять брокер, например Mosquitto
+```
+docker run -d --name mosquitto -p 1883:1883 eclipse-mosquitto
+```
+

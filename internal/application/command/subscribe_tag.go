@@ -32,7 +32,7 @@ func (h *SubscribeTagHandler) Handle(ctx context.Context, cmd SubscribeTagComman
 	}
 
 	subID := uuid.New().String()
-	topic := "mcp/tag/" + cmd.TagName
+	topic := "tag/" + cmd.TagName
 	err := h.subscriber.Subscribe(ctx, topic, func(data []byte) {
 	})
 	if err != nil {

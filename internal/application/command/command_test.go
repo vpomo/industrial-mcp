@@ -59,13 +59,16 @@ func TestWriteTagHandler(t *testing.T) {
 	}
 
 	publisher.mu.Lock()
-	if len(publisher.published) != 1 {
-		t.Errorf("expected 1 published message, got %d", len(publisher.published))
+	defer publisher.mu.Unlock()
+	if len(publisher.published) != 2 {
+		t.Fatalf("expected 2 published messages, got %d", len(publisher.published))
 	}
-	if publisher.published[0].topic != "mcp/tag/written" {
-		t.Errorf("expected topic 'mcp/tag/written', got %s", publisher.published[0].topic)
+	if publisher.published[0].topic != "tag/temperature" {
+		t.Errorf("expected topic 'tag/temperature', got %s", publisher.published[0].topic)
 	}
-	publisher.mu.Unlock()
+	if publisher.published[1].topic != "tag/written" {
+		t.Errorf("expected topic 'tag/written', got %s", publisher.published[1].topic)
+	}
 }
 
 func TestWriteTagHandlerNilPublisher(t *testing.T) {
@@ -137,8 +140,8 @@ func TestSubscribeTagHandler(t *testing.T) {
 	if resp.SubscriptionID == "" {
 		t.Error("expected non-empty subscription ID")
 	}
-	if resp.Topic != "mcp/tag/my_sensor" {
-		t.Errorf("expected topic 'mcp/tag/my_sensor', got %s", resp.Topic)
+	if resp.Topic != "tag/my_sensor" {
+		t.Errorf("expected topic 'tag/my_sensor', got %s", resp.Topic)
 	}
 }
 

@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"syscall"
 	"time"
 
@@ -46,6 +47,7 @@ type MQTTConfig struct {
 	Password    string `yaml:"password"`
 	TopicPrefix string `yaml:"topic_prefix"`
 	QoS         int    `yaml:"qos"`
+	Retain      bool   `yaml:"retain"`
 }
 
 type OPCUAConfig struct {
@@ -108,26 +110,22 @@ func main() {
 
 	tagService := service.NewTagService(tagRepo)
 
-	var mqttClient *mqtt.MQTTClient
-	if cfg.MQTT.BrokerURL != "" {
-		mqttClient, err = mqtt.NewMQTTClient(
-			cfg.MQTT.BrokerURL,
-			cfg.MQTT.ClientID,
-			cfg.MQTT.TopicPrefix,
-		)
-		if err != nil {
-			appLogger.Warn("MQTT disabled", "error", err.Error())
-		}
-	}
-
-	readTagH := query.NewReadTagHandler(tagService)
+	mqttCfg := mqttConfigFromApp(cfg)
+	applyMQTTEnv(&mqttCfg)
 
 	var mqttPublisher mqtt.PublishPublisher
 	var mqttSubscriber mqtt.TagSubscriber
-	if mqttClient != nil {
-		mqttPublisher = mqttClient
-		mqttSubscriber = mqttClient
+	var mqttLazy *mqtt.LazyClient
+	if mqttCfg.Enabled() {
+		mqttLazy = mqtt.NewLazyClient(mqttCfg)
+		mqttPublisher = mqttLazy
+		mqttSubscriber = mqttLazy
+		appLogger.Info("MQTT enabled", "broker", mqttCfg.BrokerURL, "prefix", mqttCfg.TopicPrefix)
+	} else {
+		appLogger.Warn("MQTT disabled", "reason", "empty broker_url")
 	}
+
+	readTagH := query.NewReadTagHandler(tagService)
 
 	writeTagH := command.NewWriteTagHandler(tagRepo, mqttPublisher)
 	subTagH := command.NewSubscribeTagHandler(mqttSubscriber)
@@ -219,6 +217,9 @@ func main() {
 	}
 
 	appLogger.Info("shutting down server")
+	if mqttLazy != nil {
+		mqttLazy.Disconnect()
+	}
 	cancel()
 
 	time.Sleep(time.Second)
@@ -291,4 +292,44 @@ func itoa(i int) string {
 		i /= 10
 	}
 	return string(buf[pos:])
+}
+
+func mqttConfigFromApp(cfg *Config) mqtt.Config {
+	qos := byte(cfg.MQTT.QoS)
+	if qos > 2 {
+		qos = 0
+	}
+	return mqtt.Config{
+		BrokerURL:   cfg.MQTT.BrokerURL,
+		ClientID:    cfg.MQTT.ClientID,
+		Username:    cfg.MQTT.Username,
+		Password:    cfg.MQTT.Password,
+		TopicPrefix: cfg.MQTT.TopicPrefix,
+		QoS:         qos,
+		Retain:      cfg.MQTT.Retain,
+	}
+}
+
+func applyMQTTEnv(cfg *mqtt.Config) {
+	if v := os.Getenv("MQTT_BROKER_URL"); v != "" {
+		cfg.BrokerURL = v
+	}
+	if v := os.Getenv("MQTT_CLIENT_ID"); v != "" {
+		cfg.ClientID = v
+	}
+	if v := os.Getenv("MQTT_USERNAME"); v != "" {
+		cfg.Username = v
+	}
+	if v := os.Getenv("MQTT_PASSWORD"); v != "" {
+		cfg.Password = v
+	}
+	if v := os.Getenv("MQTT_TOPIC_PREFIX"); v != "" {
+		cfg.TopicPrefix = v
+	}
+	if v := os.Getenv("MQTT_RETAIN"); v != "" {
+		retain, err := strconv.ParseBool(v)
+		if err == nil {
+			cfg.Retain = retain
+		}
+	}
 }

@@ -5,12 +5,13 @@ server:
   write_timeout: 30s
 
 mqtt:
-  broker_url: "tcp://localhost:1883"
+  broker_url: "tcp://185.240.103.204:1883"
   client_id: "mcp_server"
-  username: ""
-  password: ""
+  username: "admin"
+  password: "secret123"
   topic_prefix: "mcp/"
   qos: 0
+  retain: true
 
 opcua:
   endpoint: "opc.tcp://localhost:4840"
